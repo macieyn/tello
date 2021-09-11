@@ -1,6 +1,7 @@
 from enum import Enum
 from . import commands
 from .enums import TelloResponse, OnOff
+from .objects import Point3D, WifiConfig
 
 
 class Commander:
@@ -56,7 +57,7 @@ class Commander:
     def flip_backward(self) -> TelloResponse:
         pass
 
-    def go_to_point_at_speed(self, x: int, y: int, z: int, speed: int) -> TelloResponse:
+    def go_to_point_at_speed(self, point: Point3D, speed: int) -> TelloResponse:
         pass
 
     def stop(self) -> TelloResponse:
@@ -65,7 +66,7 @@ class Commander:
     def hoover_in_place(self) -> TelloResponse:
         self.stop()
 
-    def move_from_point_to_point_in_curve_movement_at_speed(self, x1: int, y1: int, z1: int, x2: int, y2: int, z2: int, speed: int):
+    def move_from_point_to_point_in_curve_movement_at_speed(self, starting_point: Point3D, target_point: Point3D, speed: int):
         pass
 
     def jump_to_mission_pad(self) -> TelloResponse:
@@ -80,7 +81,7 @@ class Commander:
     def set_remote_controller_control(self, x: int, y: int, z: int, yaw: int) -> TelloResponse:
         pass
 
-    def set_wifi_password(self, ssid: str, password: str) -> TelloResponse:
+    def set_wifi_password(self, wifi: WifiConfig) -> TelloResponse:
         pass
 
     def enable_mission_pad_detection(self):
@@ -95,7 +96,7 @@ class Commander:
     def set_mission_pad_detection_direction(self) -> TelloResponse:
         raise NotImplementedError
 
-    def set_access_point(self, ssid: str, password: str):
+    def set_access_point(self, access_point: WifiConfig):
         pass
 
     def get_current_speed(self) -> int:
@@ -115,7 +116,3 @@ class Commander:
 
     def get_serial_number(self) -> str:
         pass
-
-    def 
-
-
