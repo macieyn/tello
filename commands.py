@@ -3,7 +3,6 @@ from typing import Optional, Protocol
 
 
 class AbstractCommand(Protocol):
-
     @abstractmethod
     def execute(self):
         raise NotImplementedError
@@ -22,6 +21,6 @@ class BaseCommand(AbstractCommand):
             self.command: str = command
         for k, v in kwargs.items():
             setattr(self, k, v)
-        
+
     def execute(self):
         pass

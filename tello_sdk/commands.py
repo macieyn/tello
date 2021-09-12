@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Protocol
+from typing import Optional, Sequence, Union
 
 
 class ValidationError(Exception):
@@ -6,15 +6,14 @@ class ValidationError(Exception):
 
 
 class ValueValidator:
-    
     @staticmethod
     def check_boundries(value: int, minimum: int, maximum: int):
         if not minimum < value < maximum:
             raise ValidationError
 
     @staticmethod
-    def check_options(value: int, options: List[Any]):
-        if not value in options:
+    def check_options(value: Union[str, int], options: Sequence[Union[str, int]]):
+        if value not in options:
             raise ValidationError
 
 
@@ -52,7 +51,7 @@ class Command:
     GET_SDK = "sdk?"
     GET_SN = "sn?"
 
-    validator: ValueValidator = ValueValidator
+    validator = ValueValidator
 
     def takeoff(self) -> str:
         return self.TAKEOFF
@@ -102,7 +101,7 @@ class Command:
         return f"{self.CCW} {value}"
 
     def flip(self, value: str) -> str:
-        options = ["l", "r", "f", "b"]
+        options: Sequence[str] = ["l", "r", "f", "b"]
         self.validator.check_options(value=value, options=options)
         return f"{self.FLIP} {value}"
 
@@ -116,7 +115,17 @@ class Command:
     def stop(self) -> str:
         return self.STOP
 
-    def curve(self, x1: int, y1: int, z1: int, x2: int, y2: int, z2: int, speed: int, mid: Optional[str] = None):
+    def curve(
+        self,
+        x1: int,
+        y1: int,
+        z1: int,
+        x2: int,
+        y2: int,
+        z2: int,
+        speed: int,
+        mid: Optional[str] = None,
+    ) -> str:
         self.validator.check_boundries(value=x1, minimum=20, maximum=500)
         self.validator.check_boundries(value=y1, minimum=20, maximum=500)
         self.validator.check_boundries(value=z1, minimum=20, maximum=500)
@@ -126,7 +135,9 @@ class Command:
         self.validator.check_boundries(value=speed, minimum=10, maximum=100)
         return f"{self.GO} {x1} {y1} {z1} {x2} {y2} {z2} {speed}"
 
-    def jump(self, x: int, y: int, z: int, speed: int, yaw: int, mid1: str, mid2: str) -> str:
+    def jump(
+        self, x: int, y: int, z: int, speed: int, yaw: int, mid1: str, mid2: str
+    ) -> str:
         pass
 
     def speed(self, value: int) -> str:
@@ -143,22 +154,22 @@ class Command:
     def wifi(self, ssid: str, password: str) -> str:
         return f"{self.WIFI} {ssid} {password}"
 
-    def mon(self):
+    def mon(self) -> str:
         return f"{self.STREAM_ON}"
 
     def moff(self) -> str:
         return f"{self.STREAM_OFF}"
 
-    def ap(self, ssid: str, password: int):
+    def ap(self, ssid: str, password: int) -> str:
         pass
 
-    def get_speed(self) -> int:
+    def get_speed(self) -> str:
         return self.GET_SPEED
 
-    def get_battery(self) -> int:
+    def get_battery(self) -> str:
         return self.GET_BATTERY
 
-    def get_time(self) -> int:
+    def get_time(self) -> str:
         return self.GET_TIME
 
     def get_wifi(self) -> str:
