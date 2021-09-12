@@ -1,3 +1,15 @@
 [tool.black]
 line-length = 88
 target-version = ['py36', 'py37', 'py38']
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+python_files = [
+    "test_*.py",
+    "test.py",
+    "tests.py",
+]
+testpaths = [
+    "tello_sdk",
+]

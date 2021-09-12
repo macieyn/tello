@@ -12,6 +12,8 @@ mypy = "*"
 isort = "*"
 flake8 = "*"
 black = "==21.8b0"
+pytest = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.8"

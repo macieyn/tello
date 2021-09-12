@@ -8,7 +8,7 @@ class ValidationError(Exception):
 class ValueValidator:
     @staticmethod
     def check_boundries(value: int, minimum: int, maximum: int):
-        if not minimum < value < maximum:
+        if not minimum <= value <= maximum:
             raise ValidationError
 
     @staticmethod
@@ -17,12 +17,12 @@ class ValueValidator:
             raise ValidationError
 
 
-class Command:
-    ENTER_SDK_MODE = "command"
+class TelloSDK:
+    COMMAND = "command"
     TAKEOFF = "takeoff"
     LAND = "land"
-    STREAM_ON = "streamon"
-    STREAM_OFF = "streamoff"
+    STREAMON = "streamon"
+    STREAMOFF = "streamoff"
     EMERGENCY = "emergency"
     UP = "up"
     DOWN = "down"
@@ -40,9 +40,9 @@ class Command:
     SPEED = "speed"
     RC = "rc"
     WIFI = "wifi"
-    ENABLE_MISSION_PAD_DETECTION = "mon"
-    DISABLE_MISSION_PAD_DETECTION = "moff"
-    SET_MISSION_PAD_DIRECTION_DETECTION = "mdirection"
+    MON = "mon"
+    MOFF = "moff"
+    MDIRECTION = "mdirection"
     AP = "ap"
     GET_SPEED = "speed?"
     GET_BATTERY = "battery?"
@@ -59,11 +59,11 @@ class Command:
     def land(self) -> str:
         return self.LAND
 
-    def stream_on(self) -> str:
-        return self.STREAM_ON
+    def streamon(self) -> str:
+        return self.STREAMON
 
-    def stream_off(self) -> str:
-        return self.STREAM_OFF
+    def streamoff(self) -> str:
+        return self.STREAMOFF
 
     def emergency(self) -> str:
         return self.EMERGENCY
@@ -133,7 +133,7 @@ class Command:
         self.validator.check_boundries(value=y2, minimum=20, maximum=500)
         self.validator.check_boundries(value=z2, minimum=20, maximum=500)
         self.validator.check_boundries(value=speed, minimum=10, maximum=100)
-        return f"{self.GO} {x1} {y1} {z1} {x2} {y2} {z2} {speed}"
+        return f"{self.CURVE} {x1} {y1} {z1} {x2} {y2} {z2} {speed}"
 
     def jump(
         self, x: int, y: int, z: int, speed: int, yaw: int, mid1: str, mid2: str
@@ -142,7 +142,7 @@ class Command:
 
     def speed(self, value: int) -> str:
         self.validator.check_boundries(value=value, minimum=10, maximum=100)
-        return f"{self.SPEED}  {value}"
+        return f"{self.SPEED} {value}"
 
     def rc(self, a: int, b: int, c: int, d: int) -> str:
         self.validator.check_boundries(value=a, minimum=-100, maximum=100)
@@ -155,13 +155,13 @@ class Command:
         return f"{self.WIFI} {ssid} {password}"
 
     def mon(self) -> str:
-        return f"{self.STREAM_ON}"
+        return f"{self.MON}"
 
     def moff(self) -> str:
-        return f"{self.STREAM_OFF}"
+        return f"{self.MOFF}"
 
-    def ap(self, ssid: str, password: int) -> str:
-        pass
+    def ap(self, ssid: str, password: str) -> str:
+        return f"{self.AP} {ssid} {password}"
 
     def get_speed(self) -> str:
         return self.GET_SPEED
@@ -178,5 +178,5 @@ class Command:
     def get_sdk(self) -> str:
         return self.GET_TIME
 
-    def get_serial(self) -> str:
+    def get_sn(self) -> str:
         return self.GET_SN
